@@ -3,6 +3,7 @@ package org.launchcode.codingevents.controllers;
 import jakarta.validation.Valid;
 import org.launchcode.codingevents.data.EventCategoryRepository;
 import org.launchcode.codingevents.data.EventRepository;
+import org.launchcode.codingevents.data.TagRepository;
 import org.launchcode.codingevents.models.Event;
 import org.launchcode.codingevents.models.EventCategory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class EventController {
 
     @Autowired
     private EventCategoryRepository eventCategoryRepository;
+    @Autowired
+    private TagRepository tagRepository;
 
     @GetMapping
     public String displayEvents(@RequestParam(required = false) Integer categoryId, Model model) {
@@ -101,4 +104,11 @@ public class EventController {
         return "events/detail";
     }
 
+    public String displayAddTagForm(@RequestParam Integer eventID, Model model) {
+        Optional<Event> result =eventRepository.findById(eventID);
+        Event event = result.get();
+        model.addAttribute("title", "Add Tag to: " +event.getName());
+        model.addAttribute("tags", tagRepository.findAll());
+        
+    }
 }
